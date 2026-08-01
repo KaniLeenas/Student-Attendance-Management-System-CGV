@@ -1,0 +1,8 @@
+Flask>=2.3.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+pillow>=10.0.0
+matplotlib>=3.7.0
+scikit-learn>=1.3.0
+pyxml>=0.8.4
+werkzeug>=2.3.0

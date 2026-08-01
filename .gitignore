@@ -1,0 +1,27 @@
+# Data & Uploads
+data/sheets/*
+!data/sheets/.gitkeep
+data/uploads/*
+!data/uploads/.gitkeep
+data/output/*
+!data/output/.gitkeep
+data/signatures/*
+!data/signatures/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+
+# Database & IDE
+*.db
+*.sqlite3
+.vscode/
+.idea/
+.DS_Store
