@@ -19,7 +19,8 @@ if __name__ == '__main__':
 
 
 
-#student details
+
+#student details version 01
 
 @app.route("/students/<student_no>")
 @login_required
