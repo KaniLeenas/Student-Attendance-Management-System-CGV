@@ -1,5 +1,27 @@
-{% extends 'base.html' %}
-{% block title %}Attendance Sessions - SAMS{% endblock %}
+{% extends "base.html" %}
+{% block title %}Sessions{% endblock %}
+{% block heading %}Sessions{% endblock %}
+{% block sub %}One row per processed signing sheet{% endblock %}
 {% block content %}
-<h1>Attendance Sessions</h1>
+<section class="card">
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Date</th><th>Time</th><th>Lecturer</th>
+      <th>Hall</th><th>Source image</th><th>Present</th></tr></thead>
+    <tbody>
+    {% for s in sessions %}
+      <tr>
+        <td>{{ s.session_id }}</td>
+        <td>{{ s.session_date }}</td>
+        <td class="mono">{{ '%s'|format(s.start_time) }}</td>
+        <td>{{ s.lecturer or '-' }}</td>
+        <td>{{ s.hall or '-' }}</td>
+        <td class="mono dim">{{ s.source_image or '-' }}</td>
+        <td><span class="tag ok">{{ s.present or 0 }}/{{ s.total or 0 }}</span></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="empty">No sessions stored yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
 {% endblock %}
