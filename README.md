@@ -1,3 +1,6 @@
+# Student-Attendance-Management-System-CGV
+Student Attendance Management System (SAMS) that uses image processing, data visualization, and optionally signature recognition.
+shakeef
 # Student Attendance Management System (SAMS)
 
 SAMS is an automated attendance management system using Computer Vision & Graphics (CVG) techniques for processing attendance sheets, table detection, signature detection, verification, and web-based management.
