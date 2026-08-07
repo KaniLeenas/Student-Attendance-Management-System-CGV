@@ -1,5 +1,48 @@
-{% extends 'base.html' %}
-{% block title %}Student Details - SAMS{% endblock %}
+{% extends "base.html" %}
+{% block title %}{{ s.name }}{% endblock %}
+{% block heading %}{{ s.title }} {{ s.name }}{% endblock %}
+{% block sub %}Index {{ s.student_no }} &middot;
+<code>python infovis.py {{ s.student_no }}</code>{% endblock %}
+
 {% block content %}
-<h1>Student Profile</h1>
+{% set present = rows|selectattr('status','equalto','present')|list|length %}
+{% set pct = (present / rows|length * 100) if rows else 0 %}
+<section class="stats">
+  <div class="card stat"><span>Attended</span><strong class="g">{{ present }}</strong><em>sessions</em></div>
+  <div class="card stat"><span>Missed</span><strong class="rd">{{ rows|length - present }}</strong><em>sessions</em></div>
+  <div class="card stat"><span>Rate</span><strong>{{ '%.1f'|format(pct) }}%</strong><em>of {{ rows|length }} sheets</em></div>
+  <div class="card stat"><span>Eligibility</span>
+    <strong class="{{ 'g' if pct>=80 else 'rd' }}">{{ 'OK' if pct>=80 else 'LOW' }}</strong>
+    <em>80 % requirement</em></div>
+</section>
+
+<section class="grid-2">
+  <div class="card"><h3>Session timeline</h3>
+    <canvas id="timeline" height="170" data-student="{{ s.student_no }}"></canvas></div>
+  <div class="card"><h3>Present vs absent</h3>
+    <canvas id="donut" height="170" data-present="{{ present }}"
+            data-absent="{{ rows|length - present }}"></canvas></div>
+</section>
+
+<section class="card">
+  <h3>Records</h3>
+  <table class="tbl">
+    <thead><tr><th>Date</th><th>Time</th><th>Hall</th><th>Lecturer</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td>{{ r.session_date }}</td>
+        <td class="mono">{{ '%s'|format(r.start_time) }}</td>
+        <td>{{ r.hall or '-' }}</td>
+        <td>{{ r.lecturer or '-' }}</td>
+        <td><span class="tag {{ 'ok' if r.status=='present' else 'bad' }}">{{ r.status|upper }}</span></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">No records.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
 {% endblock %}
+
+{% block scripts %}<script>SAMS.studentCharts();</script>{% endblock %}

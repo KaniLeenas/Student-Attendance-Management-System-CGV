@@ -15,6 +15,14 @@ if __name__ == '__main__':
     app.run(debug=True, port=5000)
 
 
+# M5 — Students
+# ==========================================================================
+@app.route("/students")
+@login_required
+def students():
+    db = db_or_none()
+    return render_template("students.html",
+                           summary=db.get_class_summary() if db else [])
 
 
 
