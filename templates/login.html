@@ -1,0 +1,25 @@
+{% extends "base_public.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<form class="card auth" method="post">
+  <div class="brand center">
+    <div class="logo">S</div>
+    <div>
+      <h1>SAMS</h1>
+      <span>Attendance Vision</span>
+    </div>
+  </div>
+
+  <label class="field"><span>Username</span>
+    <input type="text" name="username" autocomplete="username" autofocus required>
+  </label>
+  <label class="field"><span>Password</span>
+    <input type="password" name="password" autocomplete="current-password" required>
+  </label>
+
+  <button class="btn primary lg" type="submit">Log in</button>
+
+  <p class="hint">Ask your team lead for an account, or create one with
+    <code>python manage_users.py add &lt;user&gt; &lt;pass&gt; staff</code></p>
+</form>
+{% endblock %}

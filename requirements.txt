@@ -1,0 +1,7 @@
+opencv-python>=4.8.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+Flask>=3.0.0
+Werkzeug>=3.0.0
+mysql-connector-python>=8.2.0
+Pillow>=10.0.0

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}User accounts{% endblock %}
+{% block heading %}User accounts{% endblock %}
+{% block sub %}Admin and staff logins for the SAMS web front-end{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h3>Existing accounts</h3>
+  <table class="tbl">
+    <thead><tr><th>Username</th><th>Role</th><th>Full name</th>
+      <th>Created</th><th></th></tr></thead>
+    <tbody>
+    {% for u in accounts %}
+      <tr>
+        <td class="mono">{{ u.username }}</td>
+        <td><span class="tag {{ 'ok' if u.role=='admin' else 'neutral' }}">{{ u.role|upper }}</span></td>
+        <td>{{ u.full_name or '-' }}</td>
+        <td class="dim">{{ u.created_at }}</td>
+        <td class="r">
+          <form method="post" action="{{ url_for('users_delete', user_id=u.user_id) }}"
+                onsubmit="return confirm('Delete this account?')">
+            <button class="btn ghost sm" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">No accounts yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<form class="card" method="post" action="{{ url_for('users_add') }}">
+  <h3>Add account</h3>
+  <div class="grid-3">
+    <label class="field"><span>Username</span>
+      <input name="username" required></label>
+    <label class="field"><span>Password</span>
+      <input name="password" type="password" required></label>
+    <label class="field"><span>Role</span>
+      <select name="role">
+        <option value="staff">Staff</option>
+        <option value="admin">Admin</option>
+      </select></label>
+  </div>
+  <label class="field"><span>Full name</span><input name="full_name"></label>
+  <button class="btn primary lg" type="submit">Create account</button>
+</form>
+{% endblock %}
