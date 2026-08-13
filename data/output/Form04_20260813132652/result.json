@@ -1,0 +1,169 @@
+{
+  "job": "Form04_20260813132652",
+  "image": "Form04.jpeg",
+  "out_dir": "C:\\Users\\Shakeef\\OneDrive\\Desktop\\Student_CGV\\SAMS_project\\data\\output\\Form04_20260813132652",
+  "xml_path": "C:\\Users\\Shakeef\\OneDrive\\Desktop\\Student_CGV\\SAMS_project\\info.xml",
+  "subject_code": "CS402.3",
+  "subject_title": "Computer Graphics and Visualization",
+  "session": {
+    "date": "2019-07-05",
+    "start": "13:00",
+    "end": "16:00",
+    "lecturer": "Dr. Rasika Ranaweera",
+    "hall": "L104"
+  },
+  "skew": -2.27,
+  "grid": {
+    "cols": 5,
+    "rows": 7,
+    "fallback": false
+  },
+  "steps": [
+    {
+      "key": "original",
+      "title": "Original capture",
+      "description": "Raw smart-phone photograph of the signing sheet.",
+      "path": "01_original.png"
+    },
+    {
+      "key": "resized",
+      "title": "Normalised size (1600 px)",
+      "description": "Every sheet is processed at one fixed working resolution so all kernel sizes and thresholds stay comparable.",
+      "path": "02_resized.png"
+    },
+    {
+      "key": "grayscale",
+      "title": "Grayscale conversion",
+      "description": "BGR to a single luminance channel; the colour of the pen is ignored at this stage.",
+      "path": "03_grayscale.png"
+    },
+    {
+      "key": "denoised",
+      "title": "Bilateral denoising",
+      "description": "Edge-preserving smoothing removes camera noise but keeps the thin pen strokes intact.",
+      "path": "04_denoised.png"
+    },
+    {
+      "key": "deskewed",
+      "title": "Deskew (-2.27 deg)",
+      "description": "A Hough transform on the long table rules gives the tilt of the page; the image is rotated back to horizontal.",
+      "path": "05_deskewed.png"
+    },
+    {
+      "key": "illumination",
+      "title": "Illumination flattening",
+      "description": "Morphological closing estimates the paper background; dividing by it removes shadows and hot-spots.",
+      "path": "06_illumination.png"
+    },
+    {
+      "key": "binarized",
+      "title": "Adaptive binarisation",
+      "description": "Gaussian adaptive threshold (block 41, C 12): ink becomes white, paper becomes black.",
+      "path": "07_binarized.png"
+    },
+    {
+      "key": "morphology",
+      "title": "Morphological opening",
+      "description": "A 2x2 opening deletes isolated speckles left by JPEG compression.",
+      "path": "08_morphology.png"
+    },
+    {
+      "key": "h_lines",
+      "title": "Horizontal rule extraction",
+      "description": "Opening with a wide, one-pixel-tall kernel keeps only the horizontal rules of the table.",
+      "path": "09_h_lines.png"
+    },
+    {
+      "key": "v_lines",
+      "title": "Vertical rule extraction",
+      "description": "Opening with a tall, one-pixel-wide kernel keeps only the vertical rules.",
+      "path": "10_v_lines.png"
+    },
+    {
+      "key": "grid",
+      "title": "Reconstructed table skeleton",
+      "description": "A bitwise OR of both rule masks rebuilds the grid.",
+      "path": "11_grid.png"
+    },
+    {
+      "key": "table",
+      "title": "Table localisation",
+      "description": "Student table found at (188,721) size 1120x311; 5 columns by 7 rows",
+      "path": "12_table.png"
+    },
+    {
+      "key": "cells",
+      "title": "Signature cell segmentation",
+      "description": "The last column of every student row is isolated - these are the regions of interest.",
+      "path": "13_cells.png"
+    },
+    {
+      "key": "signatures",
+      "title": "Per-cell ink extraction",
+      "description": "Left: the cropped signature cell. Right: the colour-independent ink mask (dark stroke OR high saturation) after small-component removal. Ink coverage is compared against the 1.5% threshold.",
+      "path": "14_signatures.png"
+    },
+    {
+      "key": "verdict",
+      "title": "Attendance verdict",
+      "description": "Green = signature detected (present), red = empty cell (absent).",
+      "path": "15_verdict.png"
+    }
+  ],
+  "records": [
+    {
+      "row": 1,
+      "student_no": "10000409",
+      "name": "M S Dilshanika Perera",
+      "status": "present",
+      "ink_ratio": 23.434,
+      "components": 2,
+      "confidence": 100.0
+    },
+    {
+      "row": 2,
+      "student_no": "10009301",
+      "name": "C W M A Shehan Abeyrathne",
+      "status": "present",
+      "ink_ratio": 19.508,
+      "components": 2,
+      "confidence": 100.0
+    },
+    {
+      "row": 3,
+      "student_no": "10009302",
+      "name": "B A K M Chithrananda",
+      "status": "present",
+      "ink_ratio": 24.349,
+      "components": 2,
+      "confidence": 100.0
+    },
+    {
+      "row": 4,
+      "student_no": "10009303",
+      "name": "W Shashini Minosha De Silva",
+      "status": "present",
+      "ink_ratio": 16.917,
+      "components": 1,
+      "confidence": 100.0
+    },
+    {
+      "row": 5,
+      "student_no": "10009304",
+      "name": "K L Udara Maduranga Liyanage",
+      "status": "present",
+      "ink_ratio": 9.435,
+      "components": 1,
+      "confidence": 100.0
+    },
+    {
+      "row": 6,
+      "student_no": "10009306",
+      "name": "Hansa Anuradha Wickramanayake",
+      "status": "present",
+      "ink_ratio": 15.214,
+      "components": 2,
+      "confidence": 100.0
+    }
+  ]
+}
