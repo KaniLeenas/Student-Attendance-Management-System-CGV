@@ -1,5 +1,65 @@
-{% extends 'base.html' %}
-{% block title %}Processing Result - SAMS{% endblock %}
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+{% block heading %}{{ r.image }}{% endblock %}
+{% block sub %}{{ r.session.date }} &middot; {{ r.session.start }}&ndash;{{ r.session.end }}
+&middot; Hall {{ r.session.hall or '-' }} &middot; {{ r.session.lecturer }}{% endblock %}
+
 {% block content %}
-<h1>Processing Result</h1>
+{% set present = r.records|selectattr('status','equalto','present')|list|length %}
+<section class="stats">
+  <div class="card stat"><span>Present</span><strong class="g">{{ present }}</strong><em>signatures found</em></div>
+  <div class="card stat"><span>Absent</span><strong class="rd">{{ r.records|length - present }}</strong><em>empty cells</em></div>
+  <div class="card stat"><span>Skew corrected</span><strong>{{ r.skew }}&deg;</strong><em>page rotation</em></div>
+  <div class="card stat"><span>Grid</span><strong>{{ r.grid.cols }}&times;{{ r.grid.rows }}</strong>
+    <em>{{ 'static fallback' if r.grid.fallback else 'detected' }}</em></div>
+</section>
+
+<section class="card">
+  <h3>Image-processing stages <small>(report screenshots)</small></h3>
+  <div class="steps">
+    {% for s in r.steps %}
+    <figure class="step">
+      <a href="{{ url_for('output_file', job=r.job, filename=s.path) }}" target="_blank">
+        <img src="{{ url_for('output_file', job=r.job, filename=s.path) }}" alt="{{ s.title }}">
+      </a>
+      <figcaption><b>{{ loop.index }}. {{ s.title }}</b><span>{{ s.description }}</span></figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<form class="card" method="post" action="{{ url_for('save_job', job=r.job) }}">
+  <h3>Detected attendance <small>&mdash; correct any row before saving</small></h3>
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Index</th><th>Name</th><th>Ink coverage</th>
+      <th>Confidence</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for rec in r.records %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td class="mono">{{ rec.student_no }}</td>
+        <td>{{ rec.name }}</td>
+        <td><div class="bar sm"><i style="width:{{ [rec.ink_ratio*10, 100]|min }}%"></i></div>
+            <small class="mono">{{ rec.ink_ratio }} %</small></td>
+        <td class="mono">{{ rec.confidence }} %</td>
+        <td>
+          <select name="status_{{ rec.student_no }}" class="sel {{ rec.status }}">
+            <option value="present" {{ 'selected' if rec.status=='present' }}>PRESENT</option>
+            <option value="absent"  {{ 'selected' if rec.status=='absent' }}>ABSENT</option>
+          </select>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn primary lg" type="submit" {{ 'disabled' if not db_online }}>Save to sams_db</button>
+  {% if not db_online %}<p class="warn">Start MySQL in XAMPP to enable saving.</p>{% endif %}
+</form>
+
+<details class="card">
+  <summary>Console log</summary>
+  <pre class="log">{{ logs|join('\n') }}</pre>
+</details>
 {% endblock %}
+
+{% block scripts %}<script>SAMS.selects();</script>{% endblock %}

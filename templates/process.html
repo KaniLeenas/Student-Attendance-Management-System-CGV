@@ -1,5 +1,34 @@
-{% extends 'base.html' %}
-{% block title %}Process Attendance Sheet - SAMS{% endblock %}
+{% extends "base.html" %}
+{% block title %}Process{% endblock %}
+{% block heading %}Process a signing sheet{% endblock %}
+{% block sub %}Upload the photograph and info.xml &mdash; equivalent to
+<code>python sams.py 05.07.2019.jpeg info.xml</code>{% endblock %}
+
 {% block content %}
-<h1>Process Attendance Sheet</h1>
+<form class="card upload" method="post" enctype="multipart/form-data">
+  <label class="drop" id="drop">
+    <input type="file" name="sheet" id="sheet" accept="image/*" hidden>
+    <div class="drop-in">
+      <div class="ico">&#8681;</div>
+      <b>Drop the signing-sheet photo here</b>
+      <span id="fname">PNG or JPG &mdash; straight from a smart phone</span>
+    </div>
+  </label>
+
+  <label class="field">
+    <span>info.xml (optional &mdash; defaults to the bundled file)</span>
+    <input type="file" name="info" accept=".xml">
+  </label>
+
+  <div class="hint">
+    <b>The session date is read from the file name</b> (for example
+    <code>05.07.2019.jpeg</code>), exactly as on the coursework command line.
+    Every stage of the pipeline is rendered on the next screen so the
+    screenshots can go straight into the report.
+  </div>
+
+  <button class="btn primary lg" type="submit">Process sheet</button>
+</form>
 {% endblock %}
+
+{% block scripts %}<script>SAMS.dropzone();</script>{% endblock %}

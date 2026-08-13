@@ -1,6 +1,67 @@
-{% extends 'base.html' %}
-{% block title %}Dashboard - SAMS{% endblock %}
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block sub %}Attendance extracted from signing-sheet photographs{% endblock %}
+
 {% block content %}
-<h1>Dashboard</h1>
-<p>Welcome to Student Attendance Management System.</p>
+<section class="stats">
+  <div class="card stat"><span>Students</span><strong>{{ n_students }}</strong><em>enrolled in CS402.3</em></div>
+  <div class="card stat"><span>Sessions</span><strong>{{ n_sessions }}</strong><em>sheets processed</em></div>
+  <div class="card stat"><span>Attendance</span><strong>{{ '%.1f'|format(rate) }}%</strong><em>overall rate</em></div>
+  <div class="card stat"><span>Pipeline</span><strong>12</strong><em>processing stages</em></div>
+</section>
+
+<section class="grid-2">
+  <div class="card">
+    <h3>Attendance per student</h3>
+    <canvas id="overviewChart" height="150"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Recent sessions</h3>
+    <table class="tbl">
+      <thead><tr><th>Date</th><th>Hall</th><th>Present</th></tr></thead>
+      <tbody>
+      {% for s in sessions[-6:]|reverse %}
+        <tr>
+          <td>{{ s.session_date }}</td>
+          <td>{{ s.hall or '-' }}</td>
+          <td><span class="tag ok">{{ s.present or 0 }}/{{ s.total or 0 }}</span></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="3" class="empty">No sessions yet &mdash; process a signing sheet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Class register</h3>
+  <table class="tbl">
+    <thead><tr><th>Index</th><th>Student</th><th>Present</th><th>Rate</th><th></th></tr></thead>
+    <tbody>
+    {% for r in summary %}
+      <tr>
+        <td class="mono">{{ r.student_no }}</td>
+        <td>{{ r.title }} {{ r.name }}</td>
+        <td>{{ r.present }}/{{ r.total }}</td>
+        <td>
+          {% set p = (r.present / r.total * 100) if r.total else 0 %}
+          <div class="bar"><i style="width:{{ p }}%"></i></div>
+          <small>{{ '%.0f'|format(p) }}%</small>
+        </td>
+        <td class="r">
+          <a class="btn ghost sm" href="{{ url_for('student', student_no=r.student_no) }}">Chart</a>
+          <a class="btn ghost sm" href="{{ url_for('investigate', student_no=r.student_no) }}">Verify</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">Import sams_db.sql and process a sheet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
 {% endblock %}
+
+{% block scripts %}<script>SAMS.overviewChart('overviewChart');</script>{% endblock %}

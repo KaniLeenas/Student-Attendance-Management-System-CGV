@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 """
 Create / list / delete SAMS login accounts.
@@ -56,4 +57,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    sys.exit(main())
     sys.exit(main())

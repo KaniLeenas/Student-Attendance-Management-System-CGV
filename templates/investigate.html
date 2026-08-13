@@ -1,5 +1,63 @@
-{% extends 'base.html' %}
-{% block title %}Investigate Signatures - SAMS{% endblock %}
-{% block content %}
-<h1>Signature Investigation</h1>
-{% endblock %}
+```html 
+{% extends "base.html" %} {% block title %}Signatures{% endblock %} {%
+block heading %}Signature verification{% endblock %} {% block sub %}{{ s.title
+}} {{ s.name }} ({{ s.student_no }}) &middot;
+<code>python investigate.py {{ s.student_no }}</code>{% endblock %} {% block
+content %} {% if res.error %}
+<div class="card"><p class="empty">{{ res.error }}</p></div>
+{% else %}
+<section class="card">
+  <h3>Collected samples</h3>
+  <div class="sigs">
+    {% for smp in samples %} {% set rep = res.report[loop.index0] %}
+    <figure class="sig {{ 'ok' if rep.match else 'bad' }}">
+      <img src="{{ smp.url }}" alt="{{ smp.label }}" />
+      <figcaption>
+        <b>{{ rep.label }}</b>
+        <span
+          >mean {{ rep.mean }} % &middot; best {{ rep.best }} % &middot; worst
+          {{ rep.worst }} %</span
+        >
+        <em>{{ 'MATCHES' if rep.match else 'NOT MATCHING' }}</em>
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h3>
+    Pairwise similarity matrix
+    <small>(outlier cutoff for this student: {{ res.threshold }} %)</small>
+  </h3>
+  <table class="tbl matrix">
+    <thead>
+      <tr>
+        <th></th>
+        {% for r in res.report %}
+        <th>{{ r.label }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in res.matrix %}
+      <tr>
+        <th>{{ res.report[loop.index0].label }}</th>
+        {% for v in row %}
+        <td class="cellscore" style="--v:{{ v }}">{{ '%.0f'|format(v) }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p class="hint">
+    Similarity = 0.35&middot;Hu-moment shape + 0.35&middot;projection profile +
+    0.20&middot;dilated overlap (IoU) + 0.10&middot;ORB descriptor matching.
+    Verdicts are relative, not absolute: real testing showed genuine same-person
+    signatures only score 45&ndash;65% across different photos, so each sample
+    is compared against <em>this student's own</em> average consistency &mdash;
+    it is flagged only if it sits more than 1 standard deviation below their own
+    baseline, not against a fixed global number.
+  </p>
+</section>
+{% endif %} {% endblock %} ```

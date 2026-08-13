@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sams_info>
-    <metadata>
-        <system>Student Attendance Management System</system>
-        <version>1.0</version>
-    </metadata>
-</sams_info>
+<!-- info.xml : student indices and subject related information (Figure 1) -->
+<attendance>
+    <subject code="CS402.3" title="Computer Graphics and Visualization"/>
+
+    <session date="2019-07-05" start="13:00" end="16:00"
+             lecturer="Dr. Rasika Ranaweera" hall="L104"/>
+
+    <students>
+        <student no="1">
+            <index>10000409</index><title>Ms</title>
+            <name>M S Dilshanika Perera</name>
+        </student>
+        <student no="2">
+            <index>10009301</index><title>Mr</title>
+            <name>C W M A Shehan Abeyrathne</name>
+        </student>
+        <student no="3">
+            <index>10009302</index><title>Mr</title>
+            <name>B A K M Chithrananda</name>
+        </student>
+        <student no="4">
+            <index>10009303</index><title>Ms</title>
+            <name>W Shashini Minosha De Silva</name>
+        </student>
+        <student no="5">
+            <index>10009304</index><title>Mr</title>
+            <name>K L Udara Maduranga Liyanage</name>
+        </student>
+        <student no="6">
+            <index>10009306</index><title>Mr</title>
+            <name>Hansa Anuradha Wickramanayake</name>
+        </student>
+    </students>
+</attendance>
