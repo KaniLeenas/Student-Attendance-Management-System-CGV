@@ -1,4 +1,4 @@
-"""Session based authentication with two roles: admin and staff."""
+"""Session based authentication with two roles: admin and staff developers."""
 from __future__ import annotations
 
 from functools import wraps
