@@ -1,4 +1,13 @@
 
+#!/usr/bin/env python
+"""
+Create / list / delete SAMS login accounts.
+
+    $ python manage_users.py add admin admin123 admin "Dr Rasika Ranaweera"
+    $ python manage_users.py add staff01 pass123 staff "Group Member 1"
+    $ python manage_users.py list
+    $ python manage_users.py delete 3
+"""
 import sys
 
 from core.database import Database
@@ -48,4 +57,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    sys.exit(main())
     sys.exit(main())

@@ -1,5 +1,24 @@
-{% extends 'base.html' %}
-{% block title %}Students - SAMS{% endblock %}
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block heading %}Students{% endblock %}
+{% block sub %}Open a student for the attendance visualization{% endblock %}
 {% block content %}
-<h1>Student Roster</h1>
+<section class="grid-3">
+{% for r in summary %}
+  {% set p = (r.present / r.total * 100) if r.total else 0 %}
+  <div class="card person">
+    <div class="avatar">{{ r.name[:1] }}</div>
+    <b>{{ r.title }} {{ r.name }}</b>
+    <span class="mono dim">{{ r.student_no }}</span>
+    <div class="bar"><i style="width:{{ p }}%"></i></div>
+    <small>{{ r.present }}/{{ r.total }} sessions &middot; {{ '%.0f'|format(p) }} %</small>
+    <div class="row">
+      <a class="btn ghost sm" href="{{ url_for('student', student_no=r.student_no) }}">Attendance</a>
+      <a class="btn ghost sm" href="{{ url_for('investigate', student_no=r.student_no) }}">Signatures</a>
+    </div>
+  </div>
+{% else %}
+  <p class="empty">No students &mdash; import sams_db.sql or run sams.py once.</p>
+{% endfor %}
+</section>
 {% endblock %}

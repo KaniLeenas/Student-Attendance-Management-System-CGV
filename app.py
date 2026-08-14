@@ -104,6 +104,14 @@ def process():
 
     img_path = os.path.join(config.UPLOAD_DIR, secure_filename(file.filename))
     file.save(img_path)
+# M5 — Students
+# ==========================================================================
+@app.route("/students")
+@login_required
+def students():
+    db = db_or_none()
+    return render_template("students.html",
+                           summary=db.get_class_summary() if db else [])
 
     xml_path = config.DEFAULT_XML
     xml_file = request.files.get("info")
